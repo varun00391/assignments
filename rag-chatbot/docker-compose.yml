@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  rag-chatbot:
+    build: .
+    container_name: rag_chatbot
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}   # Load from .env
+    env_file:
+      - .env
