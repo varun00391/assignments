@@ -44,37 +44,6 @@ def create_vectorstore(chunks):
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     return FAISS.from_documents(chunks, embeddings)
 
-
-# # Custom system prompt
-# qa_prompt = PromptTemplate(
-#     template="""
-# You are a helpful assistant specialized in answering questions from documents.  
-# Always use the retrieved context when answering.
-# Do not answer anything from outside the provided. If the context is not relevant, politely say:  
-# "I could not find that in the provided documents."
-
-# Context:
-# {context}
-
-# Question:
-# {question}
-
-# Answer in a clear and structured way:
-# """,
-#     input_variables=["context", "question"]
-# )
-
-# def create_chatbot(vectorstore):
-#     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 3})
-#     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-#     qa = ConversationalRetrievalChain.from_llm(
-#         llm=llm,
-#         retriever=retriever,
-#         memory=memory,
-#         chain_type="stuff"
-#     )
-#     return qa
-
 # -----------------------------
 # Custom system prompt
 # -----------------------------
