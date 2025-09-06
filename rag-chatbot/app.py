@@ -18,21 +18,20 @@ if "session_id" not in st.session_state:
     st.session_state.session_id = str(uuid.uuid4())
 
 
-# # Load environment variables
-# load_dotenv()
-
-# # Initialize LLM
-# llm = ChatGroq(
-#     api_key=os.getenv("GROQ_API_KEY"),
-#     model="openai/gpt-oss-120b",
-#     temperature=0
-# )
-
-GROQ_API_KEY="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"
+# Load environment variables
+load_dotenv()
 
 # Initialize LLM
 llm = ChatGroq(
-    api_key=GROQ_API_KEY,  #os.getenv("GROQ_API_KEY"),
+    api_key=os.getenv("GROQ_API_KEY"),
+    model="openai/gpt-oss-120b",
+    temperature=0
+)
+
+
+# Initialize LLM
+llm = ChatGroq(
+    api_key=os.getenv("GROQ_API_KEY"),
     model="openai/gpt-oss-120b",
     temperature=0
 )
