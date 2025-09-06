@@ -10,6 +10,12 @@ from langchain_groq import ChatGroq
 from langchain.prompts import PromptTemplate
 import os
 from dotenv import load_dotenv
+import uuid
+from db import save_chat, get_chat_history
+
+# Assign a session ID if not already present
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())
 
 
 # Load environment variables
@@ -77,6 +83,7 @@ def create_chatbot(vectorstore):
         llm=llm,
         retriever=retriever,
         memory=memory,
+        verbose=True,
         combine_docs_chain_kwargs={"prompt": qa_prompt}  # 👈 inject custom prompt
     )
     return qa
@@ -131,6 +138,18 @@ if "chatbot" in st.session_state:
     # Chat input
     user_query = st.chat_input("Ask a question about the uploaded documents...")
 
+    # if user_query:
+    #     with st.chat_message("user"):
+    #         st.markdown(user_query)
+    #     st.session_state.history.append(("user", user_query))
+
+    #     with st.spinner("Thinking..."):
+    #         bot_answer = st.session_state.chatbot.run(user_query)
+
+    #     with st.chat_message("assistant"):
+    #         st.markdown(bot_answer)
+    #     st.session_state.history.append(("assistant", bot_answer))
+
     if user_query:
         with st.chat_message("user"):
             st.markdown(user_query)
@@ -142,6 +161,15 @@ if "chatbot" in st.session_state:
         with st.chat_message("assistant"):
             st.markdown(bot_answer)
         st.session_state.history.append(("assistant", bot_answer))
+
+        # Save Q&A to MongoDB
+        save_chat(
+            session_id=st.session_state.session_id,
+            user_query=user_query,
+            bot_answer=bot_answer,
+            source_files=[f.name for f in uploaded_files] if uploaded_files else []
+        )
+
 
 else:
     st.info("👈 Upload and process documents from the sidebar to start chatting.")
