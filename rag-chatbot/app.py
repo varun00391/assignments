@@ -21,11 +21,9 @@ if "session_id" not in st.session_state:
 # Load environment variables
 load_dotenv()
 
-GROQ_API_KEY="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"
-
 # Initialize LLM
 llm = ChatGroq(
-    api_key=GROQ_API_KEY  #os.getenv("GROQ_API_KEY"),
+    api_key=os.getenv("GROQ_API_KEY"),
     model="openai/gpt-oss-120b",
     temperature=0
 )
